@@ -1,14 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-#========= nginx ===========
-cp -f box_nginx.conf /etc/nginx/nginx.conf
-nginx
+ln -fs /home/box/web/etc/nginx.conf  /etc/nginx/sites-enabled/default
+/etc/init.d/nginx restart
 
-#========= git ===========
-git config --global user.email "demon@ya.ru"
-git config --global user.name "demon"
-
-#========= gunicorn ===========
-gunicorn -b 0.0.0.0:8080 hello:app &
-
-exit 0
+gunicorn -c /home/box/web/etc/hello.py hello:app --daemon
+gunicorn -c /home/box/web/etc/django.py wsgi --daemon
